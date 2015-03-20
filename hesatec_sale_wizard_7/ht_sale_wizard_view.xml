@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+      <!-- 
+     ##############################
+     sale.order.simulation_ 
+     ##############################
+      -->
+
+    <record id="view_sale_order_simulation_filter" model="ir.ui.view">
+      <field name="name">Sale Order Simulation Filter</field>
+      <field name="model">sale.order.simulation_</field>
+      <field name="type">search</field>
+      <field name="arch" type="xml">
+        <search string="Search Simulations">
+          <filter icon="terp-dialog-close" string="Con Pedido de Ventas" domain="[('sale_order_id','!=',False)]"/>
+          <field name="name" />
+          <field name="partner_id" />
+        </search>
+      </field>
+    </record>
+
+    <record id="view_sale_order_simulation_tree" model="ir.ui.view">
+	  <field name="name">Sale Order Simulation List</field>
+	  <field name="model">sale.order.simulation_</field>
+	  <field name="type">tree</field>
+	  <field name="arch" type="xml">
+	    <tree string="Simulacion de Venta">
+          <field name="name" />
+          <field name="date" />
+          <field name="partner_id" />
+          <field name="pricelist_id" invisible="1" />
+          <field name="total" />
+          <field name="advance" />
+          <field name="financiado" />
+          <field name="intereses" />
+          <field name="total_financiado" />
+          <field name="gran_total" />
+          <field name="sale_order_id" />
+          <field name="tipo_interes" />
+        </tree>
+      </field>
+    </record>
+    
+    <record id="view_sale_order_simulation_form" model="ir.ui.view">
+	  <field name="name">Sale Order Simulation</field>
+	  <field name="model">sale.order.simulation_</field>
+	  <field name="type">form</field>
+	  <field name="arch" type="xml">
+	    <form string="Simulacion de Venta">  
+          <header>
+            <button icon='gtk-save-as' type="object" string="Crear Pedido de Venta" name="action_create_sale_order" />
+            <button icon='gtk-print' type="object" string="Imprimir Simulacion" name="action_print_simulation" />
+            <button icon='gtk-redo' type="object" string="Re-Calcular" name="action_calculate" />
+          </header>
+          <sheet>
+            <h1>
+              <label string="Simulacion"/>
+              <field name="name" class="oe_inline" readonly="1"/>
+            </h1>
+	        <group col="4" colspan="4">
+	          <field name="partner_id" on_change="on_change_partner_id(partner_id)"/>
+              <field name="pricelist_id" />
+              <field name="date" />
+              <field name="sale_order_id" />
+	          <separator string="Products" colspan="4"/>
+              <field name="order_line" colspan="4" nolabel="1" 
+		             context="{'default_partner_id': partner_id, 'default_pricelist_id': pricelist_id}">
+		        <tree>
+		          <field name="product_id" />
+		          <field name="product_uom_qty" />
+		          <field name="product_uom" />
+		          <field name="price_unit" />
+		          <field name="subtotal" sum="SubTotal"/>
+		          <field name="tax_amount" sum="Impuestos" />
+		          <field name="total" sum="Total"/>
+		          <field name="sequence" />
+		        </tree>
+		        <form>
+              <sheet>
+                <group col="4">
+		          <field name="product_id" on_change="on_change_product_id(product_id, product_uom_qty, product_uom, partner_id, pricelist_id)" colspan="4"/>
+		          <field name="partner_id" invisible="1"/>
+		          <field name="pricelist_id" invisible="1"/>
+		          <separator string="Datos reales" colspan="4" />
+		          <field name="product_uom_qty" on_change="on_change_values(product_id, product_uom_qty, price_unit)"/>
+		          <field name="product_uom" />
+		          <field name="price_unit" on_change="on_change_values(product_id, product_uom_qty, price_unit)"/>
+		          <newline />
+		          <field name="subtotal" invisible="1"/>
+		          <field name="tax_amount" invisible="1"/>
+		          <field name="total" invisible="1"/>
+		          <field name="xsubtotal" readonly="1"/>
+		          <newline />
+		          <field name="xtax_amount" readonly="1"/>
+		          <newline />
+		          <field name="xtotal" readonly="1"/>
+		          <newline />
+		          <field name="sequence" />
+            </group>
+          </sheet>
+		        </form>
+	          </field>
+	          <group colspan="2" >
+		        <separator string="Parametros" colspan="2"/>
+		        <field name="annual_interest_rate" />
+		        <field name="advance_percent" />
+		        <field name="terms" />
+                <field name="tipo_interes" />
+	          </group>
+	          <group colspan="2">
+		        <separator string="Calculo" colspan="2"/>
+                <field name="total" />
+                <field name="advance" />
+		        <field name="financiado" />
+                <field name="intereses" />
+                <field name="total_financiado" />
+                <field name="gran_total" />
+		        <field name="monthly_amount" />
+	          </group>
+            </group>
+          </sheet>
+	    </form>
+	  </field>
+    </record>
+                
+          
+    <record id="action_sale_order_simulation" model="ir.actions.act_window">
+      <field name="name">Simulador de Ventas</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">sale.order.simulation_</field>
+      <field name="search_view_id" ref="view_sale_order_simulation_filter"/>
+      <field name="view_type">form</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+    
+    <menuitem action="action_sale_order_simulation" id="menu_sale_order_simulation" parent="base.menu_sales" sequence="50" />
+
+
+    <report id="sale_order_simulation_" 
+            string="Sale Order Simulation" 
+            model="sale.order.simulation_" 
+            name="report.sale_order_simulation_" 
+            rml="hesatec_sale_wizard/report/sale_order_simulation.rml" />
+
+
+
+   
+    </data>
+</openerp>

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <!--Gestion de Pagos de Clientes-->
+
+
+         <!--================================ ACTIONS ===========================-->
+
+        <act_window id="action_wizard_readjustment_payment"
+            multi="True"
+            key2="client_action_multi" name="Readecuacion de Adeudo"
+            res_model="invoice.readjustment" src_model="account.invoice"
+            view_mode="form" target="new" view_type="form" />
+
+
+        <!--================================ FORM VIEW ===========================-->
+<!--         <record id="invoice_readjustment_form_view" model="ir.ui.view">
+            <field name="name">Invoice.Readjustment</field>
+            <field name="model">invoice.readjustment</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Readecuacion de Adeudo">
+                    <separator colspan="4" string="Datos Generales"/>
+                        <field name="date"/>
+                        <field name="session_ids"/>
+                    <separator colspan="4"/>
+                        <group col="2" colspan="4">
+                        <button special="cancel" string="Cancelar" type="object" icon="gtk-cancel"/>
+                   </group>
+                </form>
+            </field>
+        </record> -->
+
+
+         <record id="invoice_readjustment_form_view" model="ir.ui.view">
+            <field name="name">Invoice.Readjustment</field>
+            <field name="model">invoice.readjustment</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Readecuacion de Adeudo" >  
+          <header>
+            <button icon='gtk-save-as' type="object" string="Generar la Readecuacion" name="action_create_invoice" />
+<!--             <button icon='gtk-print' type="object" string="Imprimir Simulacion" name="action_print_simulation" />
+            <button icon='gtk-redo' type="object" string="Re-Calcular" name="action_calculate" /> -->
+          </header>
+          <sheet>
+            <h1>
+              <label string="Readecuacion de Cliente"/>
+            </h1>
+            <group col="4" colspan="4">
+                <field name="session_ids" readonly="1" on_change="on_change_products(session_ids,annual_interest_rate,comission_adm,terms)" />
+<!--               <field name="partner_id" on_change="on_change_partner_id(partner_id)"/>
+ --><!--               <field name="pricelist_id" />
+ -->              <!-- <field name="date" /> -->
+<!--               <field name="sale_order_id" />
+ -->              <separator string="Products" colspan="4"/>
+              <field name="order_line" colspan="4" nolabel="1">
+                <tree>
+                  <field name="product_id" />
+                  <field name="product_uom_qty" />
+<!--                   <field name="product_uom" />
+ -->                  <field name="price_unit" />
+                  <field name="subtotal" sum="SubTotal"/>
+                  <field name="tax_amount" sum="Impuestos" />
+                  <field name="total" sum="Total"/>
+                  <field name="sequence" />
+                </tree>
+                <form>
+                  <field name="product_id" on_change="on_change_product_id(product_id, product_uom_qty, partner_id, pricelist_id)" colspan="4"/>
+<!--                   <field name="partner_id" invisible="1"/>
+ -->                  <field name="pricelist_id" invisible="1"/>
+                  <separator string="Datos reales" colspan="4" />
+                  <field name="product_uom_qty" on_change="on_change_values(product_id, product_uom_qty, price_unit)"/>
+<!--                   <field name="product_uom" />  -->
+                <newline/>
+                  <field name="price_unit" on_change="on_change_values(product_id, product_uom_qty, price_unit)"/>
+                  <newline />
+                  <field name="subtotal" invisible="1"/>
+                  <field name="tax_amount" invisible="1"/>
+                  <field name="total" invisible="1"/>
+                  <field name="xsubtotal" readonly="1"/>
+                  <newline />
+                  <field name="xtax_amount" readonly="1"/>
+                  <newline />
+                  <field name="xtotal" readonly="1"/>
+                  <newline />
+                  <field name="sequence" />
+                </form>
+              </field>
+              <newline/>
+              <group colspan="4">
+              <field name="payment_term" />
+              </group>
+              <newline/>
+              <group colspan="2" >
+                <separator string="Parametros" colspan="2"/>
+                <field name="annual_interest_rate" on_change="on_change_products(session_ids,annual_interest_rate,comission_adm,terms)" />
+                <field name="comission_adm" on_change="on_change_products(session_ids,annual_interest_rate,comission_adm,terms)" />
+<!--                 <field name="advance_percent" />
+ -->                <field name="terms" on_change="on_change_products(session_ids,annual_interest_rate,comission_adm,terms)" />
+<!--                 <field name="tipo_interes" />
+ -->              </group>
+              <group colspan="2">
+                <separator string="Calculo" colspan="2"/>
+                <field name="amount_r" />
+                <field name="intrest_admtvo" />
+                <field name="subtotal" />
+                <field name="annual_interest" />
+                <field name="total" />
+                <field name="termns" />
+
+              </group>
+<!--               <group colspan="2">
+                <separator string="Calculo" colspan="2"/>
+                <field name="total" />
+                <field name="advance" />
+                <field name="financiado" />
+                <field name="intereses" />
+                <field name="total_financiado" />
+                <field name="gran_total" />
+                <field name="monthly_amount" />
+              </group> -->
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+         <!--================================ ACTIONS =========================== -->
+
+
+        <record id="action_wizard_readjustment_payment_0" model="ir.actions.act_window">
+            <field name="name">Readecuacion de Adeudo</field>
+            <field name="res_model">invoice.readjustment</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+           <field name="view_id" ref="invoice_readjustment_form_view"/>
+           <field name="target">new</field>
+        </record>
+
+<!--             <menuitem action="action_conciliation_merchandise" id="menu_conciliation_merchandise" parent="base.menu_sales" sequence="10"/> -->
+
+
+       <!--  HERENCIA A LA VISTE DE FACTURAS PARA INGRESAR EL NUEVO BOTON WIZARD --> 
+
+
+        <!--================FORM VIEW===============-->
+        <record model="ir.ui.view" id="account_invoice_inherit_payment_form">
+            <field name="name">account.invoice.inherit</field>
+            <field name="model">account.invoice</field>
+            <field name="type">form</field>
+            <field name="priority">50</field>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="arch" type="xml">
+
+                <button name="invoice_open" position="after">
+                        <button name="%(action_wizard_readjustment_payment_0)d" type='action' string='Readecuacion de Pagos' states='open'  class="oe_highlight" groups="account.group_account_invoice"/>
+                </button>
+
+            </field>
+        </record>        
+    </data>
+</openerp>

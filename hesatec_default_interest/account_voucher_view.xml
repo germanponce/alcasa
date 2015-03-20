@@ -1,0 +1,84 @@
+<openerp>
+<data>
+
+<!-- Add fields to Revision Invoice -->
+
+        <record id="view_account_voucher_inherit_form_0" model="ir.ui.view">
+            <field name="name">Inherit Account Voucher</field>
+            <field name="model">account.voucher</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="account_voucher.view_vendor_receipt_form"/>
+            <field name="arch" type="xml">
+				    <field name="journal_id" position="after">
+<!--                     <field name="default_interest" attrs="{'invisible':['|','|',('default_advanced','=',True),('liquidation','=',True),('pre_line','!=',False)], 'readonly':[('state','!=','draft'),]}" on_change="on_change_payment_option(default_interest,default_advanced,liquidation)"/>
+                    <field name="default_advanced" attrs="{'invisible':['|','|',('default_interest','=',True),('liquidation','=',True),('pre_line','!=',False)],'readonly':[('state','!=','draft'),]}" on_change="on_change_payment_option(default_interest,default_advanced,liquidation)"/>
+                    <field name="liquidation" attrs="{'invisible':['|','|',('default_advanced','=',True),('default_interest','=',True),('pre_line','!=',False)],'readonly':[('state','!=','draft'),]}" on_change="on_change_payment_option(default_interest,default_advanced,liquidation)"/>
+                    <field name="percent" attrs="{'invisible':[('default_interest','=',False)], 'required':[('default_interest','=',True)], 'readonly':[('state','!=','draft')]}" on_change="on_change_values(percent,days,month_payment)"/>
+                    <field name="days"  attrs="{'invisible':[('default_interest','=',False)], 'required':[('default_interest','=',True)]}" on_change="on_change_values(percent,days,month_payment)"/>
+                    <field name="month_payment"  attrs="{'invisible':[('default_interest','=',False)], 'required':[('default_interest','=',True)]}" on_change="on_change_values(percent,days,month_payment)"/>
+                    <field name="liquidation_payment"  attrs="{'invisible':[('liquidation','=',False)]}" readonly="1"/>
+                    <field name="advanced_payment"  attrs="{'invisible':[('default_advanced','=',False)]}" readonly="1"/>
+                    <field name="customer_fee"  attrs="{'invisible':[('default_interest','=',False)]}"/>
+                    <field name="create_credit_note" attrs="{'invisible':['|',('default_interest','=',True),('pre_line','!=',False)]}" />
+ -->
+
+                    <field name="default_interest" attrs="{'invisible':['|',('liquidation','=',True),('pre_line','!=',False)], 'readonly':[('state','!=','draft'),]}" on_change="on_change_payment_option(default_interest,liquidation,partner_id)"/>
+<!--                     <field name="default_advanced" attrs="{'invisible':['|','|',('default_interest','=',True),('liquidation','=',True),('pre_line','!=',False)],'readonly':[('state','!=','draft'),]}" on_change="on_change_payment_option(default_interest,liquidation)"/> -->
+                    <field name="liquidation" attrs="{'invisible':['|',('default_interest','=',True),('pre_line','!=',False)],'readonly':[('state','!=','draft'),]}" on_change="on_change_payment_option(default_interest,liquidation,partner_id)"/>
+                    <field name="percent" attrs="{'invisible':['|',('default_interest','=',False),('pre_line','!=',False)], 'required':[('default_interest','=',True)], 'readonly':[('state','!=','draft')]}" on_change="on_change_values(percent,days,month_payment)"/>
+                    <field name="days"  attrs="{'invisible':['|',('default_interest','=',False),('pre_line','!=',False)], 'required':[('default_interest','=',True)]}" on_change="on_change_values(percent,days,month_payment)"/>
+                    <field name="month_payment"  attrs="{'invisible':['|',('default_interest','=',False),('pre_line','!=',False)], 'required':[('default_interest','=',True)]}" on_change="on_change_values(percent,days,month_payment)"/>
+                    <field name="liquidation_payment"  attrs="{'invisible':[('liquidation','=',False)]}" readonly="1"/>
+                    <field name="customer_fee"  attrs="{'invisible':['|',('default_interest','=',False),('pre_line','!=',False)]}"/>
+<!--                     <field name="create_credit_note" attrs="{'invisible':['|',('default_interest','=',True),('pre_line','!=',False)]}" />
+ -->
+<!--                     <button name="obtain_values_interest" string="Calcular Pago" type="object" icon="gtk-execute" attrs="{'invisible':[('default_interest','=',False)]}"/>
+ -->                    <button name="obtain_values_check" string="Calcular Pago" type="object" icon="gtk-execute" attrs="{'invisible': [('pre_line','!=',False)]}"/>
+
+<!--                     <button name="obtain_values_check_credit_note" string="Generar Nota de Credito" type="object" icon="gtk-apply" attrs="{'invisible':['|',('create_credit_note','=',False),('pre_line','!=',False)]}" /> -->
+
+<!--                     <button name="obtain_values_check_credit_note" string="Generar Pago Adelantado" type="object" icon="gtk-apply" attrs="{'invisible':['|',('create_credit_note','=',False),('pre_line','!=',False)]}" />
+ -->
+<!--                     <button name="pre_validate" string="Validar Anticipo" type="object" icon="gtk-apply" attrs="{'invisible':[('pre_line','!=',False)]}" />
+ -->                </field>
+            </field>
+        </record>
+
+
+
+          <record model="ir.actions.act_window" id="action_account_arrear_form">
+              <field name="name">Seleccion de la cuenta para desajuste</field>
+              <field name="res_model">account.arrear</field>
+              <field name="view_type">form</field>
+              <field name="view_mode">tree,form</field>
+          </record>
+
+            <!--====================================MENU================================-->
+          <menuitem name="Cuenta de Desajuste" id="menu_account_arrear_customer_form" action="action_account_arrear_form" parent="account.account_account_menu" sequence="400"/>
+
+  <!-- HERENCIA DE LAS VISTAS FORMULARIOS DE FACTURA -->
+    <record model="ir.ui.view" id="invoice_default_int_id">
+        <field name="name">account.invoice.form.inherit</field>
+        <field name="model">account.invoice</field>
+        <field name="type">form</field>
+        <field name="priority">50</field>
+        <field name="inherit_id" ref="account_voucher.view_invoice_customer"/>
+        <field name="arch" type="xml">
+            <button name="invoice_pay_customer"  position="replace">
+            </button>
+
+        </field>
+    </record>
+
+      <record id="view_invoice_customer_default" model="ir.ui.view">
+          <field name="name">account.invoice.inherit.default</field>
+          <field name="model">account.invoice</field>
+          <field name="inherit_id" ref="account.invoice_form"/>
+          <field name="arch" type="xml">
+              <xpath expr="//button[@name='invoice_open'][last()]" position="after">
+                  <button name="%(account_voucher.action_voucher_list)d" string="Registrar Pago" type="action" class="oe_highlight" attrs="{'invisible': ['|', ('state','!=','open'), ('sent','=',True)]}" groups="base.group_user"/> 
+              </xpath>
+          </field>
+      </record>
+</data>
+</openerp>

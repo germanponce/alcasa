@@ -1,0 +1,25 @@
+<openerp>
+<data>
+
+<!-- Add fields to product.product object
+'tms_category'
+-->                                                                                                                                                                                                                                
+                                                                                                          
+        <record model="ir.ui.view" id="sale_wizard_product_form_view">
+            <field name="name">Sale Wizard product.form</field>
+            <field name="model">product.product</field>
+            <field name="type">form</field>
+            <field name="priority">50</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+              <xpath expr="//div[@name='buttons']" position="inside" >
+                <group>
+                  <field name="interest_product" />
+                </group>
+              </xpath>
+            </field>
+        </record>
+
+
+</data>
+</openerp>

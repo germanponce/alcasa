@@ -1,0 +1,62 @@
+<openerp>
+<data>
+
+<!-- Add fields to product.product object
+'tms_category'
+-->                                                                                                                                                                                           <record model="ir.ui.view" id="sale_interest_product_form_view">
+            <field name="name">Sale Interest product.form</field>
+            <field name="model">product.product</field>
+            <field name="type">form</field>
+            <field name="priority">50</field>
+            <field name="inherit_id" ref="account.product_template_form_view"/>
+            <field name="arch" type="xml">
+            
+                <field name="property_account_income" position="after" >
+                    <field name="property_account_reclasif" attrs="{'invisible':[('interest_product','=',False)], 'required':[('interest_product','=',True)]}" domain="[('type','=','other')]"/>
+                    <newline/>
+                </field>
+
+                <field name="property_account_income" position="replace" >
+                    <field name="property_account_income" domain="[('type','=','other')]" groups="account.group_account_user" attrs="{'required':[('interes_moratorio','=',True)]}"/>
+                </field>
+
+            </field>
+        </record>                                 
+                                                                                                          
+        <record model="ir.ui.view" id="sale_interest_product_template_form_view">
+            <field name="name">Sale Interest product.form</field>
+            <field name="model">product.template</field>
+            <field name="type">form</field>
+            <field name="priority">50</field>
+            <field name="inherit_id" ref="account.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <field name="property_account_income" position="after" >
+                    <field name="property_account_reclasif" attrs="{'invisible':[('interest_product','=',False)], 'required':[('interest_product','=',True)]}" domain="[('type','=','other')]"/>
+                    <newline/>
+                </field>
+
+                <field name="property_account_income" position="replace" >
+                    <field name="property_account_income" domain="[('type','&lt;&gt;','view'),('type','&lt;&gt;','consolidation')]" attrs="{'required':[('interes_moratorio','=',True)]}"/>
+                </field>
+
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="default_iterest_product_form_view">
+            <field name="name">Default Interest product.form</field>
+            <field name="model">product.product</field>
+            <field name="type">form</field>
+            <field name="priority">50</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+              <xpath expr="//div[@name='buttons']" position="inside" >
+                <group>
+                  <field name="interes_moratorio" />
+                  <field name="readjustment" />
+                </group>
+              </xpath>
+            </field>
+        </record>
+
+</data>
+</openerp>

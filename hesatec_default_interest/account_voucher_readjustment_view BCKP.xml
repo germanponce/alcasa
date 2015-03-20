@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <!--Gestion de Pagos de Clientes-->
+
+
+         <!--================================ ACTIONS ===========================-->
+
+        <act_window id="action_wizard_readjustment_payment"
+            multi="True"
+            key2="client_action_multi" name="Readecuacion de Adeudo"
+            res_model="invoice.readjustment" src_model="account.invoice"
+            view_mode="form" target="new" view_type="form" />
+
+
+        <!--================================ FORM VIEW ===========================-->
+        <record id="invoice_readjustment_form_view" model="ir.ui.view">
+            <field name="name">Invoice.Readjustment</field>
+            <field name="model">invoice.readjustment</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Readecuacion de Adeudo">
+                    <separator colspan="4" string="Datos Generales"/>
+                        <field name="date"/>
+                        <field name="session_ids"/>
+                        </page>
+
+                    <separator colspan="4"/>
+                        <group col="2" colspan="4">
+                        <button special="cancel" string="Cancelar" type="object" icon="gtk-cancel"/>
+<!--                         <button name="reconciliate_merchandise" string="Conciliar Mercancía" type="object" icon="gtk-ok"/>
+ -->                    </group>
+                </form>
+            </field>
+        </record>
+         <!--================================ ACTIONS ===========================-->
+
+
+        <record id="action_wizard_readjustment_payment_0" model="ir.actions.act_window">
+            <field name="name">Readecuacion de Adeudo</field>
+            <field name="res_model">invoice.readjustment</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+           <field name="view_id" ref="invoice_readjustment_form_view"/>
+           <field name="target">new</field>
+        </record>
+
+<!--             <menuitem action="action_conciliation_merchandise" id="menu_conciliation_merchandise" parent="base.menu_sales" sequence="10"/> -->
+
+
+       <!--  HERENCIA A LA VISTE DE FACTURAS PARA INGRESAR EL NUEVO BOTON WIZARD --> 
+
+
+        <!--================FORM VIEW===============-->
+        <record model="ir.ui.view" id="account_invoice_inherit_payment_form">
+            <field name="name">account.invoice.inherit</field>
+            <field name="model">account.invoice</field>
+            <field name="type">form</field>
+            <field name="priority">50</field>
+            <field name="inherit_id" ref="account.invoice_supplier_form"/>
+            <field name="arch" type="xml">
+
+                <button name="invoice_open" position="after">
+                        <button name="%(action_wizard_readjustment_payment_0)d" type='action' string='Readecuacion de Pagos' states='open,paid' groups="account.group_account_invoice"/>
+                </button>
+
+            </field>
+        </record>        
+    </data>
+</openerp>
