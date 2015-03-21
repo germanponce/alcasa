@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record model="ir.actions.act_window" id="action_account_move_ht">
+            <field name="name">Account Move</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.move</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+            <!--====================================MENU================================-->
+            <menuitem action="action_account_move_ht" id="menu_account_move_ht" parent="account.menu_finance_receivables" sequence="48"/>
+
+        <!--====================================ACTIONS================================-->
+        <record model="ir.actions.act_window" id="action_account_move_line_ht">
+            <field name="name">Account Move Lines</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.move.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+            <!--====================================MENU================================-->
+            <menuitem action="action_account_move_line_ht" id="menu_account_move_line_ht" parent="account.menu_finance_receivables" sequence="49"/>
+
+    </data>
+</openerp>
