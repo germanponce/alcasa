@@ -30,9 +30,9 @@ from openerp.addons.decimal_precision import decimal_precision as dp
 import time
 from datetime import datetime, date
 
-class product_product(osv.osv):
-    _inherit ='product.product'
-    _name = 'product.product'
+class product_template(osv.osv):
+    _inherit ='product.template'
+    _name = 'product.template'
 
     _columns = {
 
@@ -42,7 +42,7 @@ class product_product(osv.osv):
 
     def _check_only_one_interest_product(self, cr, uid, ids, context=None):
         if self.browse(cr, uid, ids)[0].interest_product:
-            prod_obj = self.pool.get('product.product')
+            prod_obj = self.pool.get('product.template')
             print ids
             recs = prod_obj.search(cr, uid, [('interest_product', '=', 1), ('active', '=', 1), ('id', '!=', ids[0])])
             print recs
@@ -59,7 +59,7 @@ class product_product(osv.osv):
         ]
 
 
-product_product()
+product_template()
 
 
 

@@ -41,9 +41,9 @@ class product_template(osv.osv):
 product_template()
 
 
-class product_product(osv.osv):
-    _inherit ='product.product'
-    _name = 'product.product'
+class product_template(osv.osv):
+    _inherit ='product.template'
+    _name = 'product.template'
 
     _columns = {
 
@@ -54,7 +54,7 @@ class product_product(osv.osv):
 
     def _check_only_one_interes_moratorio(self, cr, uid, ids, context=None):
         if self.browse(cr, uid, ids)[0].interes_moratorio:
-            prod_obj = self.pool.get('product.product')
+            prod_obj = self.pool.get('product.template')
             print ids
             recs = prod_obj.search(cr, uid, [('interes_moratorio', '=', 1), ('active', '=', 1), ('id', '!=', ids[0])])
             print recs
@@ -64,7 +64,7 @@ class product_product(osv.osv):
 
     def _check_only_one_readjustment(self, cr, uid, ids, context=None):
         if self.browse(cr, uid, ids)[0].readjustment:
-            prod_obj = self.pool.get('product.product')
+            prod_obj = self.pool.get('product.template')
             print ids
             recs = prod_obj.search(cr, uid, [('readjustment', '=', 1), ('active', '=', 1), ('id', '!=', ids[0])])
             print recs
@@ -83,7 +83,7 @@ class product_product(osv.osv):
         ]
 
 
-product_product()
+product_template()
 
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
